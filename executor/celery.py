@@ -1,7 +1,10 @@
 from __future__ import absolute_import
 
 import os
+
 from celery import Celery
+from cluster_tasks import __tasks__
+
 
 broker_host = os.environ['BROKER_HOST']
 broker_port = os.environ['BROKER_PORT']
@@ -12,3 +15,6 @@ app = Celery('executor',
              broker='amqp://{}:{}@{}:{}'.format(broker_user, broker_pass,
                                                 broker_host, broker_port),
              backend='rpc://')
+
+for task in __tasks__:
+    app.task(task)

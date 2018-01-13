@@ -3,4 +3,4 @@ ADD requirements.txt /app/requirements.txt
 ADD . /app/
 WORKDIR /app/
 RUN pip install -r requirements.txt
-ENTRYPOINT celery -A executor worker --concurrency=20 --loglevel=info
+ENTRYPOINT celery -A executor worker --concurrency=20 --loglevel=debug
