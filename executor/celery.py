@@ -5,16 +5,19 @@ import os
 from celery import Celery
 from cluster_tasks import __tasks__
 
-
 broker_host = os.environ['BROKER_HOST']
 broker_port = os.environ['BROKER_PORT']
-broker_user = os.environ['BROKER_USER']
-broker_pass = os.environ['BROKER_PASS']
+db_number = os.environ['DB_NUMBER']
 
-app = Celery('executor',
-             broker='amqp://{}:{}@{}:{}'.format(broker_user, broker_pass,
-                                                broker_host, broker_port),
-             backend='rpc://')
+broker_url = 'redis://{host}:{port}/{db_number}'.format(
+    host=broker_host,
+    port=broker_port,
+    db_number=db_number
+)
+
+app = Celery('executor', broker=broker_url)
+
+app.conf.result_backend = broker_url
 
 for task in __tasks__:
     app.task(task)

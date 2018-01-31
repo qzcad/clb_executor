@@ -1,2 +1,3 @@
 celery==4.0.2
 git+https://github.com/Dmitry-Kiselev/cluster_tasks.git
+redis
